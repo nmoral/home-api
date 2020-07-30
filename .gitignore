@@ -1,3 +1,5 @@
 vendor
 var
 .docker-sync
+public/coverage
+coverage.xml
