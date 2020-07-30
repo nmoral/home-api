@@ -1,0 +1,5 @@
+#!/bin/bash
+
+service supervisor start && supervisorctl reread && supervisorctl update && supervisorctl start all
+
+/usr/local/bin/app-entrypoint php-fpm

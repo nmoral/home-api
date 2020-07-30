@@ -1,0 +1,36 @@
+#
+# This file is the configuration file for Docker Sync. MacOS users should use
+# this as it speeds up a lot files access in containers.
+#
+version: "2"
+
+syncs:
+
+  ${PROJECT_NAME}-data-volume:
+    src: ./
+    verbose: false
+    host_disk_mount_mode: "cached"
+    sync_strategy: "unison"
+    sync_userid: "1000"
+    sync_excludes:
+      # Pure dev and dist files has no need to be sent to docker-sync container
+      - ".env.dist"
+      - ".git"
+      - ".git-hooks"
+      - ".gitignore"
+      - ".docker-compose.yml"
+      - ".docker-compose.override.yml"
+      - ".docker-sync"
+      - ".docker-sync.yml"
+      - ".idea"
+      - "behat.yml.dist"
+      - "doc"
+      - "docker"
+      - "Makefile"
+      - "README.md"
+      # No need to sync Symfony cache and sessions (will be handled in container own volume)
+      - "var/cache"
+      - "var/sessions"
+      - "var/log"
+      # No need to sync Docker volumes
+      - "var/docker"

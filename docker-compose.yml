@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/services/app/Dockerfile
+    container_name: ${PROJECT_NAME}-app
+    volumes:
+      - .:/app
+    network_mode: bridge
+    env_file:
+      - ./.env
+    environment:
+      - VIRTUAL_HOST=${PROJECT_NAME}.local
+    expose:
+      - 80
+      - 9000

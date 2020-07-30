@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+/etc/init.d/nginx start
+
+/usr/local/bin/docker-php-entrypoint "$@"
