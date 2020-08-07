@@ -10,6 +10,8 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
+        <server name="TODO_LIST_DIR" value="todoList" force="true" />
+        <server name="FILES_DIR" value="files-tests" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
     </php>
 
@@ -22,6 +24,12 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src</directory>
+            <exclude>
+                <directory>
+                    src/Controller
+                </directory>
+                <file>src/Kernel.php</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

@@ -5,7 +5,7 @@ default:
           - App\Tests\Behat\RestContext
   extensions:
     FriendsOfBehat\SymfonyExtension:
-      bootstrap: ~
+      bootstrap: tests/bootstrap.php
       kernel:
         class: ~
         path: ~
