@@ -68,6 +68,8 @@ RUN         test -d /app && chown -R www-data:www-data /app
 
 ENV         SYMFONY_ENV=prod
 
+RUN         pecl install xdebug \
+            && docker-php-ext-enable xdebug
 
 #
 # Php custom conf
