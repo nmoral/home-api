@@ -47,6 +47,25 @@ abstract class RecordDriver extends Driver
     }
 
     /**
+     * @return array<mixed>
+     */
+    final public function retrieveList(): array
+    {
+        $objects = scandir($this->storageDir);
+        if (false === $objects) {
+            throw new \InvalidArgumentException('unable to fetch objects');
+        }
+
+        $ids = array_diff($objects, ['.', '..']);
+        $entities = [];
+        foreach ($ids as $id) {
+            $entities[] = $this->retrieve($id);
+        }
+
+        return $entities;
+    }
+
+    /**
      * @param array<mixed> $object
      *
      * @return array<mixed>

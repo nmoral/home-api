@@ -29,9 +29,11 @@ class RestContext implements Context
      */
     public function AfterScenario(): void
     {
-        $filename = $this->getFilename();
-        if (file_exists($filename)) {
-            unlink($filename);
+        $filenames = $this->getFilename();
+        foreach ($filenames as $filename) {
+            if (file_exists($filename)) {
+                unlink($filename);
+            }
         }
     }
 
@@ -106,7 +108,10 @@ class RestContext implements Context
         Assert::assertTrue($actual);
     }
 
-    private function getFilename(): string
+    /**
+     * @return array<string>
+     */
+    private function getFilename(): array
     {
         $responseContent = $this->browser->getResponse()->getContent();
         if (false === $responseContent) {
@@ -118,8 +123,18 @@ class RestContext implements Context
         }
 
         $todoListDir = $this->getTodoListDir();
+        if (isset($todoList['id'])) {
+            return [sprintf('%s/%s', $todoListDir, $todoList['id'])];
+        }
+        $ids = [];
+        foreach ($todoList as $list) {
+            if (!isset($list['id'])) {
+                continue;
+            }
+            $ids[] = sprintf('%s/%s', $todoListDir, $list['id']);
+        }
 
-        return sprintf('%s/%s', $todoListDir, $todoList['id']);
+        return $ids;
     }
 
     /**
