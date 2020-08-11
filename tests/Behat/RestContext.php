@@ -2,6 +2,9 @@
 
 namespace App\Tests\Behat;
 
+use App\Driver\PointDriver;
+use App\Driver\TodoListDriver;
+use App\Normalizer\JsonNormalizer;
 use App\Tests\Validator\JsonValidator;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -114,9 +117,30 @@ class RestContext implements Context
             throw new \InvalidArgumentException('Unable to parse json');
         }
 
+        $todoListDir = $this->getTodoListDir();
+
+        return sprintf('%s/%s', $todoListDir, $todoList['id']);
+    }
+
+    /**
+     * @Given a list with :id as id and with body:
+     */
+    public function aListWithAsIdAndWithBody(string $id, PyStringNode $string): void
+    {
+        $jsonNormalize = new JsonNormalizer();
+        $todoList = $jsonNormalize->denormalize((string) $string);
+        $todoList['id'] = $id;
+        $pointDriver = new PointDriver();
+        $todoListDriver = new TodoListDriver($this->getTodoListDir(), $pointDriver);
+
+        $todoListDriver->create($todoList);
+    }
+
+    private function getTodoListDir(): string
+    {
         $dirname = $this->container->getParameter('todo_list_dir');
         $projectDir = $this->container->getParameter('kernel.project_dir');
 
-        return sprintf('%s/%s/%s', $projectDir, $dirname, $todoList['id']);
+        return sprintf('%s/%s', $projectDir, $dirname);
     }
 }

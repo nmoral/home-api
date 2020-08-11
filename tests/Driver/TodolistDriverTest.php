@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Tests\Recorder;
+namespace App\Tests\Driver;
 
-use App\Recorder\PointDriver;
-use App\Recorder\RecordDriver;
-use App\Recorder\TodoListDriver;
 use PHPUnit\Framework\TestCase;
 
-class ListDriverTest extends TestCase
+abstract class TodolistDriverTest extends TestCase
 {
-    private static ?string $listDir = null;
+    protected static ?string $listDir = null;
 
     /**
      * @var array<mixed>|null
      */
-    private ?array $todoList = null;
+    protected ?array $todoList = null;
 
     /**
      * @return mixed
@@ -42,54 +39,6 @@ class ListDriverTest extends TestCase
     public static function tearDownAfterClass(): void
     {
         self::removeTodolistAndRootDir();
-    }
-
-    /**
-     * @dataProvider getCase
-     *
-     * @param array<mixed> $todoList
-     */
-    public function testSave(array $todoList): void
-    {
-        $recorder = new TodoListDriver(self::$listDir, new PointDriver());
-
-        $this->todoList = $recorder->save($todoList);
-
-        self::assertTrue(file_exists(self::$listDir.'/'.$this->todoList['id']));
-    }
-
-    /**
-     * @dataProvider getCase
-     *
-     * @param array<mixed> $todoList
-     */
-    public function testCreatedAt(array $todoList): void
-    {
-        $recorder = new TodoListDriver(self::$listDir, new PointDriver());
-
-        $this->todoList = $recorder->save($todoList);
-
-        self::assertInstanceOf(\DateTime::class, $this->todoList['createdAt']);
-    }
-
-    public function testExpectInvalidArgumentWhenNoRecordDir(): void
-    {
-        self::expectException(\InvalidArgumentException::class);
-        $record = new class() extends RecordDriver {
-        };
-        $record->save([]);
-    }
-
-    /**
-     * @return \Generator<array<int, mixed>>
-     */
-    public function getCase(): \Generator
-    {
-        yield [
-            [
-                'name' => 'foo',
-            ],
-        ];
     }
 
     private function removeTodolistRecord(string $id): void
