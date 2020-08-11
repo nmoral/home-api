@@ -66,4 +66,9 @@ class TodoListController extends AbstractController
     {
         return new JsonResponse($this->recorder->retrieveList());
     }
+
+    public function delete(string $id): Response
+    {
+        return new JsonResponse(null, 204);
+    }
 }
