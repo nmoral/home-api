@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Recorder;
+namespace App\Tests\Driver;
 
-use App\Recorder\PointDriver;
+use App\Driver\PointDriver;
 use PHPUnit\Framework\TestCase;
 
 class PointDriverTest extends TestCase
@@ -15,7 +15,7 @@ class PointDriverTest extends TestCase
     public function testSave(array $points): void
     {
         $driver = new PointDriver();
-        $actual = $driver->save($points);
+        $actual = $driver->create($points);
 
         self::assertArrayHasKey('id', $actual);
         self::assertArrayHasKey('createdAt', $actual);

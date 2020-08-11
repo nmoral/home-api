@@ -2,6 +2,9 @@
 
 namespace App\Tests\Behat;
 
+use App\Driver\PointDriver;
+use App\Driver\TodoListDriver;
+use App\Normalizer\JsonNormalizer;
 use App\Tests\Validator\JsonValidator;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -26,9 +29,11 @@ class RestContext implements Context
      */
     public function AfterScenario(): void
     {
-        $filename = $this->getFilename();
-        if (file_exists($filename)) {
-            unlink($filename);
+        $filenames = $this->getFilename();
+        foreach ($filenames as $filename) {
+            if (file_exists($filename)) {
+                unlink($filename);
+            }
         }
     }
 
@@ -103,7 +108,10 @@ class RestContext implements Context
         Assert::assertTrue($actual);
     }
 
-    private function getFilename(): string
+    /**
+     * @return array<string>
+     */
+    private function getFilename(): array
     {
         $responseContent = $this->browser->getResponse()->getContent();
         if (false === $responseContent) {
@@ -114,9 +122,40 @@ class RestContext implements Context
             throw new \InvalidArgumentException('Unable to parse json');
         }
 
+        $todoListDir = $this->getTodoListDir();
+        if (isset($todoList['id'])) {
+            return [sprintf('%s/%s', $todoListDir, $todoList['id'])];
+        }
+        $ids = [];
+        foreach ($todoList as $list) {
+            if (!isset($list['id'])) {
+                continue;
+            }
+            $ids[] = sprintf('%s/%s', $todoListDir, $list['id']);
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @Given a list with :id as id and with body:
+     */
+    public function aListWithAsIdAndWithBody(string $id, PyStringNode $string): void
+    {
+        $jsonNormalize = new JsonNormalizer();
+        $todoList = $jsonNormalize->denormalize((string) $string);
+        $todoList['id'] = $id;
+        $pointDriver = new PointDriver();
+        $todoListDriver = new TodoListDriver($this->getTodoListDir(), $pointDriver);
+
+        $todoListDriver->create($todoList);
+    }
+
+    private function getTodoListDir(): string
+    {
         $dirname = $this->container->getParameter('todo_list_dir');
         $projectDir = $this->container->getParameter('kernel.project_dir');
 
-        return sprintf('%s/%s/%s', $projectDir, $dirname, $todoList['id']);
+        return sprintf('%s/%s', $projectDir, $dirname);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Driver\TodoListDriver;
 use App\Normalizer\JsonNormalizer;
-use App\Recorder\TodoListDriver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,12 +30,40 @@ class TodoListController extends AbstractController
     /**
      * @Route(path="", methods={"POST"})
      */
-    public function welcomeAction(Request $request): Response
+    public function create(Request $request): Response
     {
         /** @var string $content */
         $content = $request->getContent();
         $todoList = $this->denormalizer->denormalize($content);
 
-        return new JsonResponse($this->recorder->save($todoList));
+        return new JsonResponse($this->recorder->create($todoList));
+    }
+
+    /**
+     * @Route(path="/{id}", methods={"PUT"})
+     */
+    public function update(Request $request, string $id): Response
+    {
+        /** @var string $content */
+        $content = $request->getContent();
+        $todoList = $this->denormalizer->denormalize($content);
+
+        return new JsonResponse($this->recorder->update($id, $todoList));
+    }
+
+    /**
+     * @Route(path="/{id}", methods={"GET"})
+     */
+    public function retrieve(string $id): Response
+    {
+        return new JsonResponse($this->recorder->retrieve($id));
+    }
+
+    /**
+     * @Route(path="", methods={"GET"})
+     */
+    public function retrieveList(): Response
+    {
+        return new JsonResponse($this->recorder->retrieveList());
     }
 }

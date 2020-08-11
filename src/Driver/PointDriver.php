@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Recorder;
+namespace App\Driver;
 
 class PointDriver extends Driver
 {
