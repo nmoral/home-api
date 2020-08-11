@@ -50,4 +50,12 @@ class TodoListController extends AbstractController
 
         return new JsonResponse($this->recorder->update($id, $todoList));
     }
+
+    /**
+     * @Route(path="/{id}", methods={"GEt"})
+     */
+    public function retrieve(string $id): Response
+    {
+        return new JsonResponse($this->recorder->retrieve($id));
+    }
 }

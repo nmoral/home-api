@@ -29,6 +29,7 @@ Feature: Create a TodoList
       "name": "foo",
       "points": [
           {
+            "id": "foo",
             "name": "bar",
             "position": 1,
             "description": "this is a description"
@@ -40,10 +41,10 @@ Feature: Create a TodoList
     And I found "name" with value "foo" in the response
     And I found "id" in the response
     And I found "createdAt" in the response
-    And I found "points.0.name" with value "bar" in the response
-    And I found "points.0.description" with value "this is a description" in the response
-    And I found "points.0.id" in the response
-    And I found "points.0.createdAt" in the response
+    And I found "points.foo.name" with value "bar" in the response
+    And I found "points.foo.description" with value "this is a description" in the response
+    And I found "points.foo.id" in the response
+    And I found "points.foo.createdAt" in the response
 
   Scenario: Updating a todolist
     Given a list with "123456" as id and with body:
@@ -52,6 +53,7 @@ Feature: Create a TodoList
       "name": "foo",
       "points": [
           {
+            "id": "foo",
             "name": "bar",
             "position": 1,
             "description": "this is a description"
@@ -65,11 +67,13 @@ Feature: Create a TodoList
       "name": "bar",
       "points": [
           {
+            "id": "foo",
             "name": "bar",
             "position": 1,
             "description": "this is a description"
           },
           {
+            "id": "bar",
             "name": "babar",
             "position": 2
           }
