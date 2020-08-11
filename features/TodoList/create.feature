@@ -82,3 +82,23 @@ Feature: Create a TodoList
     """
     And I found "name" with value "bar" in the response
     And I found "id" with value "123456" in the response
+
+  Scenario: getting a todolist
+    Given a list with "123456" as id and with body:
+    """
+    {
+      "name": "foo",
+      "points": [
+          {
+            "id": "foo",
+            "name": "bar",
+            "position": 1,
+            "description": "this is a description"
+          }
+      ]
+    }
+    """
+    Then I send a "GET" request to "/lists/123456"
+    And I found "name" with value "foo" in the response
+    And I found "id" with value "123456" in the response
+    And I found "points.foo.id" with value "foo" in the response
