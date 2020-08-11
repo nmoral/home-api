@@ -1,0 +1,14 @@
+env:
+  - TRAVIS=true
+language: php
+php:
+  - '7.4.8'
+install:
+  - composer install
+script:
+  - vendor/bin/phpunit --coverage-clover ./coverage.xml
+  - vendor/bin/phpstan analyse src tests features --level=7
+  - vendor/bin/php-cs-fixer fix -v --show-progress=estimating-max --diff-format=udiff
+  # upload coverage.xml file to Coveralls to analyze it
+  # minimal required coverage is set to 80+ %
+  - php php-coveralls.phar --verbose --coverage_clover ./coverage.xml -o ./coverall.json

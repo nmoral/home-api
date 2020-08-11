@@ -1,0 +1,15 @@
+parameters:
+    todo_list_dir: 'files-tests/todoList'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Tests\Behat\:
+        resource: '../tests/Behat/*'
+
+    App\Driver\TodoListDriver:
+        public: true
+        arguments:
+            $todoListDir: '%kernel.project_dir%/files-tests/todoList'
