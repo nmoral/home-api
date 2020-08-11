@@ -41,7 +41,7 @@ abstract class TodolistDriverTest extends TestCase
         self::removeTodolistAndRootDir();
     }
 
-    private function removeTodolistRecord(string $id): void
+    protected function removeTodolistRecord(string $id): void
     {
         unlink(self::$listDir.'/'.$id);
     }
@@ -59,7 +59,7 @@ abstract class TodolistDriverTest extends TestCase
         self::removeDir($rootDir);
     }
 
-    private static function removeTodolistDir(): void
+    protected static function removeTodolistDir(): void
     {
         self::$listDir = sprintf('%s/%s/%s', self::getRootDir(), $_SERVER['FILES_DIR'], $_SERVER['TODO_LIST_DIR']);
         self::removeDir(self::$listDir);
