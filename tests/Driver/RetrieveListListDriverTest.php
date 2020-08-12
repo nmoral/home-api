@@ -6,7 +6,6 @@ use App\Driver\EntityJar;
 use App\Driver\PointDriver;
 use App\Driver\TodoListDriver;
 use App\Normalizer\JsonNormalizer;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RetrieveListListDriverTest extends TodolistDriverTest
 {
@@ -16,7 +15,7 @@ class RetrieveListListDriverTest extends TodolistDriverTest
     {
         parent::setUp();
         $providedData = $this->getProvidedData();
-        if(2 !== count($providedData)) {
+        if (2 !== count($providedData)) {
             return;
         }
 
@@ -29,6 +28,7 @@ class RetrieveListListDriverTest extends TodolistDriverTest
             $this->driver->create($entity);
         }
     }
+
     protected function tearDown(): void
     {
         if (null === $this->todoList) {
@@ -74,7 +74,7 @@ class RetrieveListListDriverTest extends TodolistDriverTest
               [
                   'id' => '123457',
                   'foo' => 'bar',
-              ]
+              ],
             ],
         ];
     }

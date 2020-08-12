@@ -60,6 +60,9 @@ abstract class RecordDriver extends Driver
     {
         try {
             $objects = scandir($this->storageDir);
+            if (false === $objects) {
+                throw new \Exception('scandir errors');
+            }
         } catch (\Throwable $exception) {
             throw new \InvalidArgumentException('unable to fetch objects', 0, $exception);
         }

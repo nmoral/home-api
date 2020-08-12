@@ -6,7 +6,6 @@ use App\Driver\EntityJar;
 use App\Driver\PointDriver;
 use App\Driver\TodoListDriver;
 use App\Normalizer\JsonNormalizer;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DeleteListDriverTest extends TodolistDriverTest
 {
@@ -26,6 +25,7 @@ class DeleteListDriverTest extends TodolistDriverTest
         $this->driver->setEntityJar(new EntityJar());
         $this->driver->create($entity);
     }
+
     protected function tearDown(): void
     {
         self::removeTodolistDir();

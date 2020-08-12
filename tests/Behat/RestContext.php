@@ -2,7 +2,6 @@
 
 namespace App\Tests\Behat;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use App\Driver\PointDriver;
 use App\Driver\TodoListDriver;
 use App\Normalizer\JsonNormalizer;
@@ -126,7 +125,7 @@ class RestContext implements Context
     /**
      * @Then the list :id should no longer exist
      */
-    public function theListShouldNoLongerExist($id)
+    public function theListShouldNoLongerExist(string $id): void
     {
         $this->browser->getResponse()->getContent();
 
@@ -177,12 +176,7 @@ class RestContext implements Context
         return sprintf('%s/%s', $projectDir, $dirname);
     }
 
-    /**
-     * @param string $todoListDir
-     * @param $list
-     * @return string
-     */
-    private function generateFilename(string $todoListDir, $list): string
+    private function generateFilename(string $todoListDir, string $list): string
     {
         return sprintf('%s/%s', $todoListDir, $list);
     }
