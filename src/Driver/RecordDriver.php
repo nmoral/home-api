@@ -46,14 +46,22 @@ abstract class RecordDriver extends Driver
         return $this->jar->add($entity);
     }
 
+    final public function delete(?string $id): bool
+    {
+        $filename = $this->getFilename($id);
+
+        return unlink($filename);
+    }
+
     /**
      * @return array<mixed>
      */
     final public function retrieveList(): array
     {
-        $objects = scandir($this->storageDir);
-        if (false === $objects) {
-            throw new \InvalidArgumentException('unable to fetch objects');
+        try {
+            $objects = scandir($this->storageDir);
+        } catch (\Throwable $exception) {
+            throw new \InvalidArgumentException('unable to fetch objects', 0, $exception);
         }
 
         $ids = array_diff($objects, ['.', '..']);

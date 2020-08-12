@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -67,8 +68,15 @@ class TodoListController extends AbstractController
         return new JsonResponse($this->recorder->retrieveList());
     }
 
+    /**
+     * @Route(path="/{id}", methods={"DELETE"})
+     */
     public function delete(string $id): Response
     {
-        return new JsonResponse(null, 204);
+        if ($this->recorder->delete($id)) {
+            return new JsonResponse(null, 204);
+        }
+
+        throw new BadRequestHttpException('Unable to delete '.$id);
     }
 }

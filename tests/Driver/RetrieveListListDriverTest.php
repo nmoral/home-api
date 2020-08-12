@@ -15,11 +15,12 @@ class RetrieveListListDriverTest extends TodolistDriverTest
     public function setUp(): void
     {
         parent::setUp();
+        $providedData = $this->getProvidedData();
+        if(2 !== count($providedData)) {
+            return;
+        }
 
-        [
-            $count,
-            $entities
-        ] = $this->getProvidedData();
+        $entities = $providedData[1];
 
         $this->driver = new TodoListDriver(self::$listDir, new PointDriver());
         $this->driver->setNormalizer(new JsonNormalizer());
@@ -48,6 +49,13 @@ class RetrieveListListDriverTest extends TodolistDriverTest
         $this->todoList = $this->driver->retrieveList();
 
         self::assertCount($expectedCount, $this->todoList);
+    }
+
+    public function testRetrieveListOnWrongDirectory(): void
+    {
+        self::expectExceptionMessage('unable to fetch objects');
+        $driver = new TodoListDriver('foo/bar', new PointDriver());
+        $driver->retrieveList();
     }
 
     /**
